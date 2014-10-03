@@ -19,7 +19,7 @@ import java.util.ArrayList;
 public class VoxelGUI implements ActionListener {
 	private ScriptConsole console = new ScriptConsole();
 	private VoxelScene scene = new VoxelScene();
-	private Camera camera = new Camera(0, 0, -256, 768);
+	private Camera camera = new Camera(0.5f, 16, -32, 768);
 	private VoxelCanvas canvas = new VoxelCanvas(scene, camera);
 	private ArrayList<String> messages = new ArrayList<String>();
 
@@ -138,9 +138,9 @@ public class VoxelGUI implements ActionListener {
 			console.getInputPane().requestFocusInWindow();
 		} else if (action == "palette") {
 			final Color choice = JColorChooser.showDialog(
-				top, "Pick color", canvas.getDrawingColor());
+				top, "Pick color", scene.getDrawingColor());
 			if (choice != null) {
-				canvas.setDrawingColor(choice);
+				scene.setDrawingColor(choice);
 				canvas.repaint();
 			}
 		}
