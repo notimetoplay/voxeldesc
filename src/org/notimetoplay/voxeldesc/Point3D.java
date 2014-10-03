@@ -5,10 +5,10 @@ public class Point3D implements Comparable<Point3D> {
 	public byte y = 0;
 	public byte z = 0;
 	
-	public Point3D(final byte nx, final byte ny, final byte nz) {
-		x = nx;
-		y = ny;
-		z = nz;
+	public Point3D(final int nx, final int ny, final int nz) {
+		x = (byte) nx;
+		y = (byte) ny;
+		z = (byte) nz;
 	}
 	
 	public boolean equals(Object other) {
