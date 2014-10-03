@@ -5,20 +5,9 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 import java.util.List;
+import java.lang.Math;
 
 public class VoxelCanvas extends Canvas {
-	private Color drawingColor = Color.BLACK;
-	
-	public Color getDrawingColor() {
-		return drawingColor;
-	}
-	
-	public void setDrawingColor(final Color c) {
-		if (c == null) throw new NullPointerException(
-			"Non-null color expected");
-		drawingColor = c;
-	}
-	
 	private VoxelScene scene;
 	private Camera camera;
 	
@@ -52,18 +41,88 @@ public class VoxelCanvas extends Canvas {
 	public void setMessages(List<String> m) { messages = m; }
 	
 	public void paint(Graphics g) {
+		int midX = getWidth() / 2;
+		//int midY = getHeight() / 2;
+		int midY = 0; // Assume we're high above the scene.
+		
+		g.translate(midX, midY);
 		paintGrid(g);
 		
-		// TODO: Paint the scene proper.
+		for (Point3D i: scene.getVoxels().keySet())
+			paintVoxel(g, i, scene.getVoxels().get(i));
 		
+		g.translate(-midX, -midY);
+
+		g.setColor(Color.BLACK);
 		paintMessages(g);
-		
-		g.setColor(drawingColor);
+		g.setColor(scene.getDrawingColor());
 		g.fillOval(getWidth() - 32, 8, 24, 24);
 	}
 	
-	private void paintGrid(Graphics g) {
+	private void paintGrid(final Graphics g) {
+		g.setColor(Color.BLACK);
+		for (int x = -128; x <= 128; x+=16)
+			paintGuideZ(g, x, 0);
+		for (int z = -128; z <= 128; z+=16)
+			paintGuideX(g, 0, z);
 		
+		g.setColor(Color.BLUE);
+		paintGuideZ(g, 0, 0);
+		g.setColor(Color.GREEN);
+		paintGuideY(g, 0, 0);
+		g.setColor(Color.RED);
+		paintGuideX(g, 0, 0);
+	}
+	
+	private void paintGuideX(Graphics g, int y, int z) {
+		if (z <= camera.z)
+			return;
+		
+		camera.project(-128, y, z);
+		int x1 = (int) Math.floor(camera.px);
+		int y1 = (int) Math.floor(camera.py);
+		camera.project(127, y, z);
+		int x2 = (int) Math.floor(camera.px);
+		int y2 = (int) Math.floor(camera.py);
+		g.drawLine(x1, -y1, x2, -y2);
+	}
+	
+	private void paintGuideY(Graphics g, int x, int z) {
+		if (z <= camera.z)
+			return;
+
+		camera.project(x, -128, z);
+		int x1 = (int) Math.floor(camera.px);
+		int y1 = (int) Math.floor(camera.py);
+		camera.project(x, 127, z);
+		int x2 = (int) Math.floor(camera.px);
+		int y2 = (int) Math.floor(camera.py);
+		g.drawLine(x1, -y1, x2, -y2);
+	}
+	
+	private void paintGuideZ(Graphics g, int x, int y) {
+		final int z1 = Math.max(-128, (int) camera.z + 1);
+		final int z2 = 127;
+
+		camera.project(x, y, z1);
+		final int x1 = (int) Math.floor(camera.px);
+		final int y1 = (int) Math.floor(camera.py);
+		camera.project(x, y, z2);
+		final int x2 = (int) Math.floor(camera.px);
+		final int y2 = (int) Math.floor(camera.py);
+		g.drawLine(x1, -y1, x2, -y2);
+	}
+	
+	private void paintVoxel(Graphics g, Point3D p, Color c) {
+		if (p.z <= camera.z)
+			return;
+		
+		camera.project(p.x, p.y, p.z);
+		final short x = (short) Math.floor(camera.px);
+		final short y = (short) Math.floor(camera.py);
+		final short side = (short) Math.ceil(camera.scale);
+		g.setColor(c);
+		g.fillRect(x, -y, side, side);
 	}
 	
 	private void paintMessages(final Graphics g) {
