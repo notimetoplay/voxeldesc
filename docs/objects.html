@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+ <head>
+  <title>Predefined objects -- VoxelDesc help</title> 
+  <link rel="stylesheet" type="text/css" href="voxeldesc.css">
+ </head>
+ 
+ <body>
+  <h1>Predefined objects</h1>
+  
+  <p>By default, VoxelDesc exposes just five basic objects to the scripting engine:
+  
+  <ul>
+   <li><a href="scene.html">Scene</a>
+   <li><a href="camera.html">Camera</a>
+   <li><a href="canvas.html">Canvas</a>
+   <li><a href="app.html">App</a>
+   <li><a href="console.html">Console</a>
+  </ul>
+  
+  <p>Of these, you're going to use scene and camera 80% of the time. The others are mostly so you can say things like,
+  
+  <code><pre>
+
+        canvas.repaint();
+        app.window.setSize(1280, 1024);
+        console.window.visible = true;
+  </pre></code>
+  
+  <blockquote><b>Note for Java programmers</b><br>Yes, those are regular Java properties in the above example. <code>console.getWindow().setVisible(true);</code> works just as well (it's just a JFrame). But Javascript accepts a shorter, friendlier syntax.</blockquote>
+  
+  <p>In addition, VoxelDesc offers you 13 predefined colors: black, blue, cyan, dgray, gray, green, lgray, magenta, orange, pink, red, white and yellow. Considering you can modify each of them with <code>.brighter()</code> and <code>.darker()</code>, that gives you 39 predefined colors on the command line. But you can create any shade with <code>scene.color(r, g, b)</code>, or the Palette dialog in the GUI.
+  
+  <blockquote><b>Note for Java programmers</b><br>You'll notice this list corresponds to the constants in java.awt.Color; it's a selection as good as any other.</blockquote>
+  
+  <a href="index.html">Help home</a>
+ </body>
+</html>
