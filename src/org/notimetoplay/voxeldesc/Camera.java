@@ -33,6 +33,7 @@ public class Camera {
 		x = nx;
 		y = ny;
 		z = nz;
+		
 		return this;
 	}
 	
@@ -40,6 +41,64 @@ public class Camera {
 		x += nx;
 		y += ny;
 		z += nz;
+		
 		return this;
+	}
+	
+	public Camera zoomIn(final float factor) {
+		x /= factor;
+		y /= factor;
+		z /= factor;
+		
+		return this;
+	}
+	
+	public Camera zoomOut(final float factor) {
+		x *= factor;
+		y *= factor;
+		z *= factor;
+		
+		return this;
+	}
+	
+	public Camera left(final float by) {
+		x -= by;
+		return this;
+	}
+	
+	public Camera right(final float by) {
+		x += by;
+		return this;
+	}
+	
+	public Camera up(final float by) {
+		y += by;
+		return this;
+	}
+	
+	public Camera down(final float by) {
+		y -= by;
+		return this;
+	}
+	
+	public Camera back(final float by) {
+		z -= by;
+		return this;
+	}
+	
+	public Camera fore(final float by) {
+		z += by;
+		return this;
+	}
+	
+	public Camera center() {
+		x = 0;
+		y = Math.abs(z) / 2;
+		return this;
+	}
+	
+	public String toString() {
+		return String.format(
+			"Camera(%.2f %.2f %.2f) f=%.2f", x, y, z, f);
 	}
 }
