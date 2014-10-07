@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+ <head>
+  <title>Scene object -- VoxelDesc help</title> 
+  <link rel="stylesheet" type="text/css" href="voxeldesc.css">
+ </head>
+ 
+ <body>
+  <h1>Scene object</h1>
+  
+  <p>The scene object has two main purposes: to hold the coordinates and color of each voxel, and to provide the operations for editing them. Voxels are automagically kept in the right order for rendering, which is why filling in many of them at once can be slow, and gets slower the more voxels you have.
+  
+  <p>Simply typing <code>scene</code> on the command line will tell you how many voxels are in it. Also, <code>scene.fillColor</code> will tell you what the current drawing color is. (You can also see it in the upper right corner of the window.)
+  
+  <dl>
+        <dt>.from(x, y, z)</dt>
+        <dt>.to(x, y, z)</dt>
+        <dt>.fill(x, y, z)</dt>
+        <dt>.fill()</dt>
+        <dt>.dot(x, y, z)</dt>
+  </dl>
+  
+  <p>You can chain any number of these as follows: <code>scene.color(0xffffcc).from(-1, -1, -1).to(3, 3, 3).fill().from(4, 4, 4).fill(5, 5, 5);</code> but don't go overboard. You can always hit the up arrow to edit and re-run previous commands.
+  
+  <p><a href="index.html">Help home</a>
+ </body>
+</html>
