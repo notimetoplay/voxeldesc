@@ -8,6 +8,8 @@ import java.util.List;
 import java.lang.Math;
 
 public class VoxelCanvas extends Canvas {
+	public static final int MAXMSG = 16;
+	
 	private VoxelScene scene;
 	private Camera camera;
 	
@@ -41,12 +43,14 @@ public class VoxelCanvas extends Canvas {
 	public void setMessages(List<String> m) { messages = m; }
 	
 	public void paint(Graphics g) {
+		camera.f = getHeight();
+		
 		int midX = getWidth() / 2;
-		//int midY = getHeight() / 2;
-		int midY = 0; // Assume we're high above the scene.
+		// Optimize for high/low camera angles.
+		int midY = (camera.y > 0) ? 0 : getHeight();
 		
 		g.translate(midX, midY);
-		paintGrid(g);
+		paintGuides(g);
 		
 		for (Point3D i: scene.getVoxels().keySet())
 			paintVoxel(g, i, scene.getVoxels().get(i));
@@ -55,11 +59,11 @@ public class VoxelCanvas extends Canvas {
 
 		g.setColor(Color.BLACK);
 		paintMessages(g);
-		g.setColor(scene.getDrawingColor());
+		g.setColor(scene.getFillColor());
 		g.fillOval(getWidth() - 32, 8, 24, 24);
 	}
 	
-	private void paintGrid(final Graphics g) {
+	private void paintGuides(final Graphics g) {
 		g.setColor(Color.BLACK);
 		for (int x = -128; x <= 128; x+=16)
 			paintGuideZ(g, x, 0);
@@ -126,19 +130,19 @@ public class VoxelCanvas extends Canvas {
 	}
 	
 	private void paintMessages(final Graphics g) {
-		final List<String> last10;
+		final List<String> lastN;
 		
 		if (messages == null || messages.size() < 1) {
 			return;
-		} else if (messages.size() < 10) {
-			last10 = messages;
+		} else if (messages.size() < MAXMSG) {
+			lastN = messages;
 		} else {
-			last10 = messages.subList(
-				messages.size() - 10, messages.size());
+			lastN = messages.subList(
+				messages.size() - MAXMSG, messages.size());
 		}
 		
-		for (byte i = 0; i < last10.size(); i++) {
-			g.drawString(last10.get(i), 16, (i + 1) * 16);
+		for (byte i = 0; i < lastN.size(); i++) {
+			g.drawString(lastN.get(i), 16, (i + 1) * 16);
 		}
 	}
 }
