@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+ <head>
+  <title>Advanced example -- VoxelDesc help</title> 
+  <link rel="stylesheet" type="text/css" href="voxeldesc.css">
+ </head>
+ 
+ <body>
+  <h1>Advanced example</h1>
+  
+  <p>Open the scripting console and paste in the following code:
+  
+  <code><pre>
+
+        camera.moveTo(10, 30, -40);
+        for (x = 0; x &lt;= 20; x += 2)
+                for (y = 0; y &lt;= 20; y += 2)
+                        for (z = 0; z &lt;= 20; z += 2)
+                                scene.color(x * 10, y * 10, z * 10).dot(x, y, z);
+        canvas.repaint();
+  </pre></code>
+  
+  <p>Note the call to <code>canvas.repaint()</code> at the end; we
+  only need that in the console. You could type the entire thing at
+  the command line, in which case VoxelDesc would auto-repaint the
+  canvas for you. But in the console you have more room to play around.
+  Error messages are also shown here instead of the main window.
+  
+  <p>The scripting language used in VoxelDesc is Javascript, because
+  that's what the Java platform provides by default. A tutorial is
+  outside the scope of this manual, but feel free to experiment. Try
+  out the various operations described these pages, and change the
+  examples to suit your needs. You can't break anything.
+  
+  <p><a href="index.html">Help home</a>
+ </body>
+</html>
