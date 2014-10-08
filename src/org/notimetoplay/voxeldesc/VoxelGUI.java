@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.io.FileNotFoundException;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 
 import javax.script.ScriptException;
 import java.util.ArrayList;
@@ -201,20 +202,15 @@ public class VoxelGUI
 			}
 				
 		} else if (action == "open") {
-			filedlg.removeChoosableFileFilter(filterJS);
-			filedlg.addChoosableFileFilter(filterVXL);
-			filedlg.setFileFilter(filterVXL);
-			filedlg.showOpenDialog(top);
+			handleOpenFile();
 		} else if (action == "save") {
 			if (saveFile != null) {
 				saveScene();
 			} else if (askForSaveFile()) {
-				assert saveFile != null;
 				saveScene();
 			}
 		} else if (action == "save-as") {
 			if (askForSaveFile()) {
-				assert saveFile != null;
 				saveScene();
 			}
 		} else if (action == "load-script") {
@@ -278,9 +274,40 @@ public class VoxelGUI
 			messages.add("Error in script. See console.");
 			console.getOutputPane().append(e.getMessage());
 		} catch (IOException e) {
+			messages.add("Error reading file. See console.");
 			console.getOutputPane().append(e.getMessage());
 		}
 		canvas.repaint();
+	}
+	
+	public void handleOpenFile() {
+		filedlg.removeChoosableFileFilter(filterJS);
+		filedlg.addChoosableFileFilter(filterVXL);
+		filedlg.setFileFilter(filterVXL);
+		final int answer = filedlg.showOpenDialog(top);
+		if (answer != JFileChooser.APPROVE_OPTION)
+			return;
+
+		final File file = filedlg.getSelectedFile();
+		final FileReader reader;
+		try {
+			reader = new FileReader(file);
+		} catch (FileNotFoundException e) {
+			messages.add("File not found: " + file);
+			return;
+		}
+		
+		scene.getVoxels().clear();
+		try {
+			scene.deserialize(reader);
+			canvas.repaint();
+			messages.add("Scene loaded from " + file);
+			saveFile = file;
+			reader.close();
+		} catch (IOException e) {
+			messages.add("Error loading file. See console.");
+			console.getOutputPane().append(e.getMessage());
+		}
 	}
 	
 	public boolean askForSaveFile() {
@@ -289,7 +316,7 @@ public class VoxelGUI
 		filedlg.setFileFilter(filterVXL);
 		if (saveFile != null)
 			filedlg.setSelectedFile(saveFile);
-		final int answer = filedlg.showOpenDialog(top);
+		final int answer = filedlg.showSaveDialog(top);
 		if (answer != JFileChooser.APPROVE_OPTION) {
 			return false;
 		} else {
@@ -299,7 +326,16 @@ public class VoxelGUI
 	}
 	
 	public void saveScene() {
-		
+		assert saveFile != null;
+		try {
+			final FileWriter out = new FileWriter(saveFile);
+			scene.serialize(out);
+			out.close();
+			messages.add("Scene saved to " + saveFile);
+		} catch (IOException e) {
+			messages.add("Error saving file. See console.");
+			console.getOutputPane().append(e.getMessage());
+		}
 	}
 	
 	public void keyPressed(KeyEvent e) {
