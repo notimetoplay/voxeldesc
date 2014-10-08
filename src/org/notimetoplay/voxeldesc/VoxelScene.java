@@ -3,7 +3,9 @@ package org.notimetoplay.voxeldesc;
 import java.util.TreeMap;
 import java.awt.Color;
 import java.io.Writer;
+import java.io.Reader;
 import java.io.BufferedReader;
+import java.io.IOException;
 
 public class VoxelScene {
 	private TreeMap<Point3D, Color> voxels = new TreeMap<Point3D, Color>();
@@ -90,11 +92,53 @@ public class VoxelScene {
 			"Scene: %d voxels OK", voxels.size());
 	}
 	
-	public void serialize(Writer out) {
-		
+	public void serialize(final Writer out) throws IOException {
+		for (Point3D i: voxels.keySet()) {
+			final Color c = voxels.get(i);
+			if (c.getAlpha() < 255) {
+				out.write(String.format(
+					"%d %d %d %d %d %d %d\n",
+					i.x, i.y, i.z,
+					c.getRed(), c.getGreen(), c.getBlue(),
+					c.getAlpha()));
+			} else {
+				out.write(String.format(
+					"%d %d %d %d %d %d\n",
+					i.x, i.y, i.z,
+					c.getRed(), c.getGreen(), c.getBlue()));
+			}
+		}
 	}
 	
-	public void deserialize(BufferedReader in) {
-		
+	public void deserialize(final Reader in) throws IOException {
+		final BufferedReader buffer = new BufferedReader(in);
+		String line;
+		while ((line = buffer.readLine()) != null) {
+			final String[] numbers = line.split("\\s");
+			if (numbers.length == 7) {
+				final Point3D p = new Point3D(
+					Integer.parseInt(numbers[0]),
+					Integer.parseInt(numbers[1]),
+					Integer.parseInt(numbers[2]));
+				final Color c = new Color(
+					Integer.parseInt(numbers[3]),
+					Integer.parseInt(numbers[4]),
+					Integer.parseInt(numbers[5]),
+					Integer.parseInt(numbers[6]));
+				voxels.put(p, c);
+			} else if (numbers.length == 6) {
+				final Point3D p = new Point3D(
+					Integer.parseInt(numbers[0]),
+					Integer.parseInt(numbers[1]),
+					Integer.parseInt(numbers[2]));
+				final Color c = new Color(
+					Integer.parseInt(numbers[3]),
+					Integer.parseInt(numbers[4]),
+					Integer.parseInt(numbers[5]));
+				voxels.put(p, c);
+			} else {
+				throw new IOException("Short input line");
+			}
+		}
 	}
 }
