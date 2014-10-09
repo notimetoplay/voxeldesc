@@ -43,6 +43,8 @@ public class VoxelScene {
 	
 	private final Point3D cursor = new Point3D(0, 0, 0);
 	
+	public Point3D getCursor() { return cursor; }
+	
 	public VoxelScene from(final byte x, final byte y, final byte z) {
 		cursor.x = x;
 		cursor.y = y;
@@ -53,6 +55,8 @@ public class VoxelScene {
 	
 	private final Point3D mark = new Point3D(0, 0, 0);
 	
+	private Point3D getMark() { return mark; }
+	
 	public VoxelScene to(final byte x, final byte y, final byte z) {
 		mark.x = x;
 		mark.y = y;
@@ -62,17 +66,19 @@ public class VoxelScene {
 	}
 	
 	public VoxelScene fill(final byte wx, final byte wy, final byte wz) {
-		mark.x = (byte) (cursor.x + wx - 1);
-		mark.y = (byte) (cursor.y + wy - 1);
-		mark.z = (byte) (cursor.z + wz - 1);
-		fill();
-		return this;
+		mark.x = (byte) (cursor.x + wx);
+		mark.y = (byte) (cursor.y + wy);
+		mark.z = (byte) (cursor.z + wz);
+
+		return fill();
 	}
 	
 	public VoxelScene fill() {
-		for (byte z = cursor.z; z <= mark.z; z++) {
-			for (byte y = cursor.y; y <= mark.y; y++) {
-				for (byte x = cursor.x; x <= mark.x; x++) {
+		final Point3D min = Point3D.minCoords(cursor, mark);
+		final Point3D max = Point3D.maxCoords(cursor, mark);
+		for (byte z = min.z; z < max.z; z++) {
+			for (byte y = min.y; y < max.y; y++) {
+				for (byte x = min.x; x < max.x; x++) {
 					voxels.put(
 						new Point3D(x, y, z),
 						fillColor);
