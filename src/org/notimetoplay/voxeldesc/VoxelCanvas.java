@@ -57,7 +57,6 @@ public class VoxelCanvas extends Canvas {
 		
 		g.translate(-midX, -midY);
 
-		g.setColor(Color.BLACK);
 		paintMessages(g);
 		g.setColor(scene.getFillColor());
 		g.fillOval(getWidth() - 32, 8, 24, 24);
@@ -127,6 +126,8 @@ public class VoxelCanvas extends Canvas {
 		final short side = (short) Math.ceil(camera.scale);
 		g.setColor(c);
 		g.fillRect(x, -y, side, side);
+		g.setColor(Color.GRAY);
+		g.drawRect(x, -y, side, side);
 	}
 	
 	private void paintMessages(final Graphics g) {
@@ -142,7 +143,11 @@ public class VoxelCanvas extends Canvas {
 		}
 		
 		for (byte i = 0; i < lastN.size(); i++) {
-			g.drawString(lastN.get(i), 16, (i + 1) * 16);
+			if (lastN.get(i).startsWith("Error"))
+				g.setColor(Color.RED);
+			else
+				g.setColor(Color.BLACK);
+			g.drawString(lastN.get(i), 16, (i + 1) * 16 + 16);
 		}
 	}
 }
