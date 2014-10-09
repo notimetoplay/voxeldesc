@@ -44,4 +44,18 @@ public class Point3D implements Comparable<Point3D> {
 		else
 			return 0;
 	}
+	
+	public static Point3D minCoords(final Point3D p1, final Point3D p2) {
+		return new Point3D(
+			Math.min(p1.x, p2.x),
+			Math.min(p1.y, p2.y),
+			Math.min(p1.z, p2.z));
+	}
+	
+	public static Point3D maxCoords(final Point3D p1, final Point3D p2) {
+		return new Point3D(
+			Math.max(p1.x, p2.x),
+			Math.max(p1.y, p2.y),
+			Math.max(p1.z, p2.z));
+	}
 }
