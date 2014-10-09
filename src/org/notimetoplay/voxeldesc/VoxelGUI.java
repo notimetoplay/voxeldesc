@@ -66,7 +66,7 @@ public class VoxelGUI
 	
 	public File getSaveFile() { return saveFile; }
 
-	private JFrame top = new JFrame("VoxelDesc");
+	private JFrame top = new JFrame(this.toString());
 	private JTextField cmdline = new JTextField();
 	private JToolBar toolbar = new JToolBar();
 	
@@ -197,6 +197,9 @@ public class VoxelGUI
 			if (answer == JOptionPane.YES_OPTION) {
 				scene.getVoxels().clear();
 				scene.setFillColor(Color.BLACK);
+				saveFile = null;
+				top.setTitle(this.toString());
+				messages.clear();
 				camera.moveTo(0, 75, -150);
 				canvas.repaint();
 			}
@@ -303,6 +306,7 @@ public class VoxelGUI
 			canvas.repaint();
 			messages.add("Scene loaded from " + file);
 			saveFile = file;
+			top.setTitle(this.toString());
 			reader.close();
 		} catch (IOException e) {
 			messages.add("Error loading file. See console.");
@@ -321,6 +325,7 @@ public class VoxelGUI
 			return false;
 		} else {
 			saveFile = filedlg.getSelectedFile();
+			top.setTitle(this.toString());
 			return true;
 		}
 	}
@@ -385,6 +390,13 @@ public class VoxelGUI
          	
 	public void keyReleased(KeyEvent e) {}
 	public void keyTyped(KeyEvent e) {}
+	
+	public String toString() {
+		if (saveFile != null)
+			return saveFile + " | VoxelDesc";
+		else
+			return "Untitled scene | VoxelDesc";
+	}
 	
 	public static void main(String[] args) {
 		VoxelGUI app = new VoxelGUI();
