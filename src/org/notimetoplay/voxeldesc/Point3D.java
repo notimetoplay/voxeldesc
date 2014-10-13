@@ -45,6 +45,12 @@ public class Point3D implements Comparable<Point3D> {
 			return 0;
 	}
 	
+	public boolean isBetween(final Point3D p1, final Point3D p2) {
+		return (p1.x <= x && x < p2.x)
+			&& (p1.y <= y && y < p2.y)
+			&& (p1.z <= z && z < p2.z);
+	}
+	
 	public static Point3D minCoords(final Point3D p1, final Point3D p2) {
 		return new Point3D(
 			Math.min(p1.x, p2.x),
