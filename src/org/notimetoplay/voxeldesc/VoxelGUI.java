@@ -35,9 +35,9 @@ import java.util.ArrayList;
 
 public class VoxelGUI
 		implements ActionListener, KeyListener, HyperlinkListener {
-	private ScriptConsole console = new ScriptConsole();
-	private VoxelScene scene = new VoxelScene();
-	private Camera camera = new Camera(0, 75, -150, 768);
+	private final ScriptConsole console = new ScriptConsole();
+	private final VoxelScene scene = new VoxelScene();
+	private final Camera camera = new Camera(0, 75, -150, 768);
 	private VoxelCanvas canvas = new VoxelCanvas(scene, camera);
 	private JFileChooser filedlg = new JFileChooser();
 	private JFrame helpdlg = new JFrame("VoxelDesc help");
@@ -103,6 +103,7 @@ public class VoxelGUI
 		top.add(canvas);
 		top.add(cmdline, BorderLayout.SOUTH);
 		top.add(toolbar, BorderLayout.NORTH);
+		top.addKeyListener(this);
 		
 		JButton button;
 		
@@ -132,6 +133,14 @@ public class VoxelGUI
 		button = new JButton("Load Script");
 		button.setMnemonic(KeyEvent.VK_L);
 		button.setActionCommand("load-script");
+		button.addActionListener(this);
+		toolbar.add(button);
+
+		toolbar.addSeparator();
+
+		button = new JButton("Repaint");
+		button.setMnemonic(KeyEvent.VK_R);
+		button.setActionCommand("repaint");
 		button.addActionListener(this);
 		toolbar.add(button);
 
@@ -218,6 +227,8 @@ public class VoxelGUI
 			}
 		} else if (action == "load-script") {
 			handleLoadScript();
+		} else if (action == "repaint") {
+			canvas.repaint();
 		}
 	}
 
@@ -231,9 +242,10 @@ public class VoxelGUI
 				messages.add(result.toString());
 			else
 				messages.add("null");
+			top.setTitle(this.toString());
 		} catch (ScriptException e) {
 			messages.add("Error in command line. See console.");
-			console.getOutputPane().append(e.getMessage());
+			console.getOutputPane().append(e.getMessage() + "\n");
 		}
 		history.add(cmd);
 		histPos = 0;
@@ -337,6 +349,8 @@ public class VoxelGUI
 			scene.serialize(out);
 			out.close();
 			messages.add("Scene saved to " + saveFile);
+			scene.setModified(false);
+			top.setTitle(this.toString());
 		} catch (IOException e) {
 			messages.add("Error saving file. See console.");
 			console.getOutputPane().append(e.getMessage());
@@ -344,6 +358,8 @@ public class VoxelGUI
 	}
 	
 	public void keyPressed(KeyEvent e) {
+		if (e.isControlDown())
+			return;
 		if (e.getKeyCode() == KeyEvent.VK_UP) {
 			if (histPos < history.size()) {
 				histPos ++;
@@ -366,6 +382,31 @@ public class VoxelGUI
 			}
 		}
 	}
+         	
+	public void keyReleased(KeyEvent e) {
+		if (!e.isControlDown())
+			return;
+		if (e.getKeyCode() == KeyEvent.VK_UP) {
+			camera.y += 1;
+			canvas.repaint();
+		} else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+			camera.y -= 1;
+			canvas.repaint();
+		} else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+			camera.x -= 1;
+			canvas.repaint();
+		} else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+			camera.x += 1;
+			canvas.repaint();
+		} else if (e.getKeyCode() == KeyEvent.VK_PAGE_DOWN) {
+			camera.z -= 1;
+			canvas.repaint();
+		} else if (e.getKeyCode() == KeyEvent.VK_PAGE_UP) {
+			camera.z += 1;
+			canvas.repaint();
+		}
+	}
+	public void keyTyped(KeyEvent e) {}
 
 	// Courtesy of the official documentation at
 	// http://docs.oracle.com/javase/7/docs/api/javax/swing/JEditorPane.html
@@ -387,15 +428,14 @@ public class VoxelGUI
 			}
 		}
 	}
-         	
-	public void keyReleased(KeyEvent e) {}
-	public void keyTyped(KeyEvent e) {}
 	
 	public String toString() {
+		final String modified =
+			scene.isModified() ? " (modified)" : "";
 		if (saveFile != null)
-			return saveFile + " | VoxelDesc";
+			return saveFile + modified + " | VoxelDesc";
 		else
-			return "Untitled scene | VoxelDesc";
+			return "Untitled scene" + modified + " | VoxelDesc";
 	}
 	
 	public static void main(String[] args) {
