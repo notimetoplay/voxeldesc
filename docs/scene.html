@@ -7,17 +7,64 @@
  
  <body>
   <h1>Scene object</h1>
-  
+
+  2014-10-11
+    
   <p>The scene object has two main purposes: to hold the coordinates and color of each voxel, and to provide the operations for editing them. Voxels are automagically kept in the right order for rendering, which is why filling in many of them at once can be slow, and gets slower the more voxels you have.
   
-  <p>Simply typing <code>scene</code> on the command line will tell you how many voxels are in it. Also, <code>scene.fillColor</code> will tell you what the current drawing color is. (You can also see it in the upper right corner of the window.)
+  <p>Simply typing <code>scene</code> on the command line will tell you how many voxels are in it. Beyond that, there are a number of useful properties and chainable operations.
+  
+  <h2>Properties</h2>
+  
+  <dl>
+        <dt>.fillColor</dt>
+        <dd>The current drawing color. You can set it with the Palette button in the toolbar or the operations below.</dd>
+        <dt>.cursor</dt>
+        <dt>.mark</dt>
+        <dd>Sets of x/y/z coordinates; most drawing operations work from the cursor, or between cursor and mark.
+  </dl>
+  
+  <h2>Operations</h2>
   
   <dl>
         <dt>.from(x, y, z)</dt>
+        <dd>Set the cursor.</dd>
         <dt>.to(x, y, z)</dt>
+        <dd>Set the mark</dd>
+        
+        <dt>.color(r, g, b)</dt>
+        <dt>.color(r, g, b, a)</dt>
+        <dt>.color(rgb)</dt>
+        <dd>Set the current drawing color, with optional transparency.</dd>
+        
         <dt>.fill(x, y, z)</dt>
+        <dd>Fill a "box" of voxels this size, starting from the cursor. Sizes can be negative.</dd>
         <dt>.fill()</dt>
+        <dd>Fill a "box" of voxels between cursor and mark.</dd>
+        <dt>.sphere(radius)</dt>
+        <dd>Fill a sphere of the given radius, centered on the cursor.</dd>
+        
         <dt>.dot(x, y, z)</dt>
+        <dd>Set a single voxel at these coordinates, without moving the cursor.</dd>
+        <dt>.hole(x, y, z)</dt>
+        <dd>Remove a single voxel like above.</dd>
+        
+        <dt>.up(n)</dt>
+        <dt>.down(n)</dt>
+        <dt>.left(n)</dt>
+        <dt>.right(n)</dt>
+        <dt>.back(n)</dt>
+        <dt>.fore(n)</dt>
+        <dd>Add N voxels in a single file in the specified direction, starting from the cursor; moves the cursor to the endpoint.</dd>
+        
+        <dt>.cut(x, y, z)</dt>
+        <dt>.copy(x, y, z)</dt>
+        <dd>Cut/copy a volume of given size starting from the cursor. Sizes can be negative.</dd>
+        <dt>.cut()</dt>
+        <dt>.copy()</dt>
+        <dd>Cut/copy the volume defined by the cursor and the mark.</dd>
+        <dt>.paste()</dt>
+        <dd>Paste the contents of the clipboard starting at the cursor. (Which should be at the lower left corner closest to the camera.)</dd>
   </dl>
   
   <p>You can chain any number of these as follows: <code>scene.color(0xffffcc).from(-1, -1, -1).to(3, 3, 3).fill().from(4, 4, 4).fill(5, 5, 5);</code> but don't go overboard. You can always hit the up arrow to edit and re-run previous commands.
