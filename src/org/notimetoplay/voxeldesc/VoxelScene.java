@@ -37,6 +37,11 @@ public class VoxelScene {
 		return this;
 	}
 	
+	public VoxelScene color(int r, int g, int b, int a) {
+		fillColor = new Color(r, g, b, a);
+		return this;
+	}
+	
 	public VoxelScene color(final int rgb) {
 		fillColor = new Color(rgb);
 		return this;
