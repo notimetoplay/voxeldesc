@@ -91,6 +91,11 @@ public class ScriptConsole implements ActionListener {
 
 		menubar.add(menu);
 		top.setJMenuBar(menubar);
+
+		output.getAccessibleContext()
+			.setAccessibleName("Console Output");
+		input.getAccessibleContext()
+			.setAccessibleName("Console Input");
 	}
 	
 	public JFrame getWindow() {
