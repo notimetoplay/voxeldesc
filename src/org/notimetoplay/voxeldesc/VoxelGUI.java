@@ -179,6 +179,11 @@ public class VoxelGUI
 		}
 		helpdlg.add(new JScrollPane(help));
 		helpdlg.setSize(800, 600);
+		
+		canvas.getAccessibleContext()
+			.setAccessibleName("Canvas");
+		cmdline.getAccessibleContext()
+			.setAccessibleName("Command Line");
 	}
 
 	public void actionPerformed(ActionEvent ev) {
