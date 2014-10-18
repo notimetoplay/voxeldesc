@@ -20,11 +20,13 @@
         canvas.repaint();
   </pre></code>
   
+  <p>Now press Ctrl-R, or choose "Run script" from the Console menu.
+  (You can't use the Enter key because you need it to edit scripts here.)
+  
   <p>Note the call to <code>canvas.repaint()</code> at the end; we
-  only need that in the console. You could type the entire thing at
-  the command line, in which case VoxelDesc would auto-repaint the
-  canvas for you. But in the console you have more room to play around.
-  Error messages are also shown here instead of the main window.
+  need that in the console, because the console lacks certain
+  conveniences; it's a "backstage access" to VoxelDesc and assumes
+  you know what you're doing.
   
   <p>The scripting language used in VoxelDesc is Javascript, because
   that's what the Java platform provides by default. A tutorial is
