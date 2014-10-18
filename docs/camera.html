@@ -8,13 +8,19 @@
  <body>
   <h1>Camera object</h1>
   
+  2014-10-18
+  
   <p>VoxelDesc employs a 2.5D, a.k.a. pseudo-3D camera. That means you can place it anywhere (even between voxels), but it can't tilt or rotate -- it always points straight along the Z axis into the distance.
   
   <p>Speaking of which, VoxelDesc uses the so called left-hand coordinate system. That means the X axis grows towards the right, the Y axis upwards, and the Z axis is going into the screen, away from you.
-  
+
   <h2>How to use</h2>
+
+  <p>You can move the camera around by pressing the arrow keys and PageUp/PageDown while holding down Control. (For some reason, that only works while the command line is focused.)
   
-  <p>The simplest thing you can do with the camera is to type <code>camera</code> on the command line; that will report its current posision. You can also interrogate and change its coordinates individually:
+  <p>You can also drag the camera around with the mouse. Use the scroll wheel for depth.
+  
+  <p>From the command line, the simplest thing you can do with the camera is to type <code>camera</code>; that will report its current posision. You can also interrogate and change its coordinates individually:
   
   <code><pre>
           
