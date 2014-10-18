@@ -3,11 +3,16 @@ package org.notimetoplay.voxeldesc;
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.event.MouseMotionListener;
+import java.awt.event.MouseWheelListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseWheelEvent;
 
 import java.util.List;
 import java.lang.Math;
 
-public class VoxelCanvas extends Canvas {
+public class VoxelCanvas extends Canvas
+		implements MouseMotionListener, MouseWheelListener {
 	public static final int MAXMSG = 16;
 	
 	private VoxelScene scene;
@@ -36,6 +41,8 @@ public class VoxelCanvas extends Canvas {
 	public VoxelCanvas(final VoxelScene s, final Camera c) {
 		setScene(s);
 		setCamera(c);
+		addMouseMotionListener(this);
+		addMouseWheelListener(this);
 	}
 
 	private List<String> messages = null;
@@ -149,5 +156,44 @@ public class VoxelCanvas extends Canvas {
 				g.setColor(Color.BLACK);
 			g.drawString(lastN.get(i), 16, (i + 1) * 16 + 16);
 		}
+	}
+	
+	private boolean dragMode = false;
+	private int deltaX = 0;
+	private int deltaY = 0;
+	
+	public void mouseDragged(MouseEvent e) {
+		boolean cameraMoved = false;
+		
+		if (dragMode == false) {
+			dragMode = true;
+			deltaX = e.getX();
+			deltaY = e.getY();
+		}
+		
+		if (Math.abs(e.getX() - deltaX) > 15) {
+			camera.x += (e.getX() - deltaX) / 16;
+			deltaX = e.getX();
+			cameraMoved = true;
+		}
+		
+		if (Math.abs(e.getY() - deltaY) > 15) {
+			camera.y += (e.getY() - deltaY) / 16;
+			deltaY = e.getY();
+			cameraMoved = true;
+		}
+		
+		if (cameraMoved) repaint();
+	}
+	
+	public void mouseMoved(MouseEvent e) {
+		dragMode = false;
+		deltaX = 0;
+		deltaY = 0;
+	}
+	
+	public void mouseWheelMoved(MouseWheelEvent e) {
+		camera.z -= e.getWheelRotation();
+		repaint();
 	}
 }
