@@ -21,4 +21,4 @@ $(JAR): $(OBJ)
 	jar cfe $(JAR) $(MAIN) LICENSE.txt docs -C bin org
 
 %.class: %.java
-	$(JAVAC) -d bin -sourcepath src src/$*.java
+	$(JAVAC) -d bin -sourcepath src -source 6 -target 6 src/$*.java
