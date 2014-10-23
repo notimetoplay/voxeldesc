@@ -118,7 +118,7 @@ public class VoxelScene {
 					
 					final double dist =
 						Math.sqrt(a*a + b*b + c*c);
-					if (dist <= radius)
+					if (dist < radius)
 						voxels.put(
 							new Point3D(x, y, z),
 							fillColor);
@@ -126,6 +126,60 @@ public class VoxelScene {
 			}
 		}
 		modified = true;
+		return this;
+	}
+	
+	public VoxelScene hollow(final byte radius) {
+		final Point3D min = new Point3D(
+			cursor.x - radius,
+			cursor.y - radius,
+			cursor.z - radius);
+		final Point3D max = new Point3D(
+			cursor.x + radius,
+			cursor.y + radius,
+			cursor.z + radius);
+		final HashSet<Point3D> selection = new HashSet<Point3D>();
+		clipboard.clear();
+		for (Point3D i: voxels.keySet()) {
+			if (i.isBetween(min, max)) {
+				final int a = Math.abs(cursor.x - i.x);
+				final int b = Math.abs(cursor.y - i.y);
+				final int c = Math.abs(cursor.z - i.z);
+				
+				final double dist =
+					Math.sqrt(a*a + b*b + c*c);
+				if (dist < radius) {
+					final Point3D rel = new Point3D(
+						i.x - min.x,
+						i.y - min.y,
+						i.z - min.z);
+					clipboard.put(rel, voxels.get(i));
+					selection.add(i);
+				}
+			}
+		}
+		for (Point3D i: selection)
+			voxels.remove(i);
+		modified = true;
+		return this;
+	}
+	
+	public VoxelScene recolor(final int wx, final int wy, final int wz) {
+		mark.x = (byte) (cursor.x + wx);
+		mark.y = (byte) (cursor.y + wy);
+		mark.z = (byte) (cursor.z + wz);
+
+		return recolor();
+	}
+	
+	public VoxelScene recolor() {
+		final Point3D min = Point3D.minCoords(cursor, mark);
+		final Point3D max = Point3D.maxCoords(cursor, mark);
+		for (Point3D i: voxels.keySet()) {
+			if (i.isBetween(min, max)) {
+				voxels.put(i, fillColor);
+			}
+		}
 		return this;
 	}
 	
