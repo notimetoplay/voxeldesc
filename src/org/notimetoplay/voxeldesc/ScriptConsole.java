@@ -27,7 +27,7 @@ public class ScriptConsole implements ActionListener {
 	
 	public ScriptConsole() {
 		final ScriptEngineManager mgr = new ScriptEngineManager();
-		engine = mgr.getEngineByName("rhino");
+		setEngine(mgr.getEngineByName("javascript"));
 		makeGUI();
 	}
 	
