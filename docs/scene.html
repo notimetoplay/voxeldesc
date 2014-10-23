@@ -8,7 +8,7 @@
  <body>
   <h1>Scene object</h1>
 
-  2014-10-11
+  2014-10-23
     
   <p>The scene object has two main purposes: to hold the coordinates and color of each voxel, and to provide the operations for editing them. Voxels are automagically kept in the right order for rendering, which is why filling in many of them at once can be slow, and gets slower the more voxels you have.
   
@@ -41,8 +41,15 @@
         <dd>Fill a "box" of voxels this size, starting from the cursor. Sizes can be negative.</dd>
         <dt>.fill()</dt>
         <dd>Fill a "box" of voxels between cursor and mark.</dd>
+        <dt>.recolor(x, y, z)</dt>
+        <dd>Change all the voxels in a volume this size, starting from the cursor, to the current drawing color. Sizes can be negative.</dd>
+        <dt>.recolor()</dt>
+        <dd>Change all the voxels between cursor and mark to the current drawing color.</dd>
+
         <dt>.sphere(radius)</dt>
         <dd>Fill a sphere of the given radius, centered on the cursor.</dd>
+        <dt>.Hollow(radius)</dt>
+        <dd>Carve out a sphere of the given radius, centered on the cursor; move any voxels within to the clipboard (see below).</dd>
         
         <dt>.dot(x, y, z)</dt>
         <dd>Set a single voxel at these coordinates, without moving the cursor.</dd>
