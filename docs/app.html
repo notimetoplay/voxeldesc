@@ -8,7 +8,51 @@
  <body>
   <h1>App object</h1>
   
+  <p>The app object implements VoxelDesc's user interface, and generally ties everything together.
   
-  <a href="index.html">Help home</a>
+  <h2>Properties</h2>
+  
+  <dl>
+   <dt><a href="console.html">.console</a></dt>
+   <dt><a href="scene.html">.scene</a></dt>
+   <dt><a href="camera.html">.camera</a></dt>
+   <dt><a href="canvas.html">.canvas</a></dt>
+   <dd>These are the same objects you can also access directly as a convenience; they actually "live" inside the app object.</dd>
+   <dt>.window</dt>
+   <dt>.helpdlg</dt>
+   <dd>JFrame objects (see below) representing the main application window and the help window respectively.</dd>
+   <dt>.messages</dt>
+   <dt>.history</dt>
+   <dd>The last 100 messages displayed and commands entered, respectively. Useful because the main window only shows the last 16 messages.</dd>
+   <dt>.saveFile</dt>
+   <dd>The current working file, if the scene has been saved at least once, or else the value <code>null</code>.</dd>
+   <dt>.cmdLine</dt>
+   <dd>The command line object, as detailed below.</dd>
+  </dl>
+  
+  <h2>Window objects</h2>
+  
+  <p><b>For Java programmers</b>, these are ordinary JFrame objects. Use with confidence.
+  
+  <p><b>Everyone else</b> should probably stick to the basics:
+  
+  <dl>
+   <dt>.title</dt>
+   <dd>A string (set like this: <code>window.title = "..."</code>). Does what you expect</dd>
+   <dt>.visible</dt>
+   <dd>A boolean (<code>true</code>/<code>false</code>). Does what you expect.
+   <dt>.size</dt>
+   <dd>Just what it says on the tin. Easier to set it like this: <code>window.setSize(width, height)</code>.</dd>
+  <dl>
+  
+  <h2>The command line</h2>
+  
+  <p>For obvious reasons, you can't very well manipulate the command line by typing commands in it. You'll probably want to use the console instead.
+          
+  <p><b>For Java programmers</b>, the command line is a JTextField object. Have fun.
+  
+  <p><b>For everyone else</b>, the most important property of the command line is <code>.text</code>. Call <code>app.handleCommandLine()</code> to try and run whatever is displayed on the command line at any given time.
+  
+  <p><a href="index.html">Help home</a>
  </body>
 </html>
