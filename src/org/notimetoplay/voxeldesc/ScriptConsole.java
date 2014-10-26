@@ -12,10 +12,12 @@ import javax.swing.JFrame;
 import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
 import javax.swing.JScrollPane;
-import javax.swing.JMenuBar;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
+import javax.swing.JToolBar;
+import javax.swing.JButton;
 import javax.swing.KeyStroke;
+
+import java.awt.BorderLayout;
+import java.awt.Font;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.InputEvent;
@@ -70,32 +72,31 @@ public class ScriptConsole implements ActionListener {
 		split.setResizeWeight(0.5);
 		top.add(split);
 		
-		final JMenuBar menubar = new JMenuBar();
-		final JMenu menu = new JMenu("Console");
-		menu.setMnemonic(KeyEvent.VK_C);
-		
-		JMenuItem item = new JMenuItem("Run script", KeyEvent.VK_R);
-		item.setAccelerator(
-			KeyStroke.getKeyStroke(
-				KeyEvent.VK_R, InputEvent.CTRL_MASK));
-		item.setActionCommand("run");
-		item.addActionListener(this);
-		menu.add(item);
-		item = new JMenuItem("Erase", KeyEvent.VK_E);
-		item.setAccelerator(
-			KeyStroke.getKeyStroke(
-				KeyEvent.VK_E, InputEvent.CTRL_MASK));
-		item.setActionCommand("erase");
-		item.addActionListener(this);
-		menu.add(item);
+		final JToolBar toolbar = new JToolBar();
 
-		menubar.add(menu);
-		top.setJMenuBar(menubar);
+		JButton button;
+		
+		button = new JButton("Run");
+		button.setMnemonic(KeyEvent.VK_R);
+		button.setActionCommand("run");
+		button.addActionListener(this);
+		toolbar.add(button);
+		button = new JButton("Erase");
+		button.setMnemonic(KeyEvent.VK_E);
+		button.setActionCommand("erase");
+		button.addActionListener(this);
+		toolbar.add(button);
+
+		top.add(toolbar, BorderLayout.NORTH);
 
 		output.getAccessibleContext()
 			.setAccessibleName("Console Output");
 		input.getAccessibleContext()
 			.setAccessibleName("Console Input");
+
+		final Font mono = new Font(Font.MONOSPACED, Font.PLAIN, 12);
+		input.setFont(mono);
+		output.setFont(mono);
 	}
 	
 	public JFrame getWindow() {
@@ -123,8 +124,10 @@ public class ScriptConsole implements ActionListener {
 				output.append(ex.getMessage());
 			}
 			output.append("\n");
+			input.requestFocusInWindow();
 		} else if (action == "erase") {
 			output.setText("");
+			input.requestFocusInWindow();
 		}
 	}
 	
