@@ -7,6 +7,7 @@ import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
+import java.awt.image.BufferedImage;
 
 import java.util.List;
 import java.lang.Math;
@@ -49,16 +50,21 @@ public class VoxelCanvas extends Canvas
 	public List<String> getMessages() { return messages; }
 	public void setMessages(List<String> m) { messages = m; }
 	
+	private boolean showGrid = true;
+	public boolean getShowGrid() { return showGrid; }
+	public void setShowGrid(boolean show) { showGrid = show; }
+	
 	public void paint(Graphics g) {
 		camera.f = getHeight();
 		
-		int midX = getWidth() / 2;
+		final int midX = getWidth() / 2;
 		// Optimize for high/low camera angles.
-		int midY = (camera.y > 0) ? 0 : getHeight();
+		final int midY = (camera.y > 0) ? 0 : getHeight();
 		
 		g.translate(midX, midY);
-		paintGuides(g);
 		
+		if (showGrid)
+			paintGuides(g);
 		for (Point3D i: scene.getVoxels().keySet())
 			paintVoxel(g, i, scene.getVoxels().get(i));
 		
@@ -84,46 +90,46 @@ public class VoxelCanvas extends Canvas
 		paintGuideX(g, 0, 0);
 	}
 	
-	private void paintGuideX(Graphics g, int y, int z) {
+	private void paintGuideX(final Graphics g, int y, int z) {
 		if (z <= camera.z)
 			return;
 		
 		camera.project(-128, y, z);
-		int x1 = (int) Math.floor(camera.px);
-		int y1 = (int) Math.floor(camera.py);
+		final short x1 = (short) Math.floor(camera.px);
+		final short y1 = (short) Math.floor(camera.py);
 		camera.project(127, y, z);
-		int x2 = (int) Math.floor(camera.px);
-		int y2 = (int) Math.floor(camera.py);
+		final short x2 = (short) Math.floor(camera.px);
+		final short y2 = (short) Math.floor(camera.py);
 		g.drawLine(x1, -y1, x2, -y2);
 	}
 	
-	private void paintGuideY(Graphics g, int x, int z) {
+	private void paintGuideY(final Graphics g, int x, int z) {
 		if (z <= camera.z)
 			return;
 
 		camera.project(x, -128, z);
-		int x1 = (int) Math.floor(camera.px);
-		int y1 = (int) Math.floor(camera.py);
+		final short x1 = (short) Math.floor(camera.px);
+		final short y1 = (short) Math.floor(camera.py);
 		camera.project(x, 127, z);
-		int x2 = (int) Math.floor(camera.px);
-		int y2 = (int) Math.floor(camera.py);
+		final short x2 = (short) Math.floor(camera.px);
+		final short y2 = (short) Math.floor(camera.py);
 		g.drawLine(x1, -y1, x2, -y2);
 	}
 	
-	private void paintGuideZ(Graphics g, int x, int y) {
+	private void paintGuideZ(final Graphics g, int x, int y) {
 		final int z1 = Math.max(-128, (int) camera.z + 1);
 		final int z2 = 127;
 
 		camera.project(x, y, z1);
-		final int x1 = (int) Math.floor(camera.px);
-		final int y1 = (int) Math.floor(camera.py);
+		final short x1 = (short) Math.floor(camera.px);
+		final short y1 = (short) Math.floor(camera.py);
 		camera.project(x, y, z2);
-		final int x2 = (int) Math.floor(camera.px);
-		final int y2 = (int) Math.floor(camera.py);
+		final short x2 = (short) Math.floor(camera.px);
+		final short y2 = (short) Math.floor(camera.py);
 		g.drawLine(x1, -y1, x2, -y2);
 	}
 	
-	private void paintVoxel(Graphics g, Point3D p, Color c) {
+	private void paintVoxel(final Graphics g, Point3D p, Color c) {
 		if (p.z <= camera.z)
 			return;
 		
@@ -195,5 +201,28 @@ public class VoxelCanvas extends Canvas
 	public void mouseWheelMoved(MouseWheelEvent e) {
 		camera.z -= e.getWheelRotation();
 		repaint();
+	}
+	
+	public BufferedImage export() {
+		final BufferedImage screenshot =
+			new BufferedImage(
+				getWidth(),
+				getHeight(),
+				BufferedImage.TYPE_INT_ARGB);
+		final Graphics g = screenshot.getGraphics();
+		
+		camera.f = getHeight();
+		
+		final int midX = getWidth() / 2;
+		// Optimize for high/low camera angles.
+		final int midY = (camera.y > 0) ? 0 : getHeight();
+		
+		g.translate(midX, midY);
+		
+		for (Point3D i: scene.getVoxels().keySet())
+			paintVoxel(g, i, scene.getVoxels().get(i));
+		
+		g.dispose();
+		return screenshot;
 	}
 }
