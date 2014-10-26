@@ -30,6 +30,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 
+import javax.imageio.ImageIO;
+
 import javax.script.ScriptException;
 import java.util.ArrayList;
 
@@ -130,6 +132,11 @@ public class VoxelGUI
 		button.setActionCommand("save-as");
 		button.addActionListener(this);
 		toolbar.add(button);
+		button = new JButton("Export");
+		button.setMnemonic(KeyEvent.VK_E);
+		button.setActionCommand("export");
+		button.addActionListener(this);
+		toolbar.add(button);
 		button = new JButton("Load Script");
 		button.setMnemonic(KeyEvent.VK_L);
 		button.setActionCommand("load-script");
@@ -138,6 +145,11 @@ public class VoxelGUI
 
 		toolbar.addSeparator();
 
+		button = new JButton("Toggle Grid");
+		button.setMnemonic(KeyEvent.VK_G);
+		button.setActionCommand("toggle-grid");
+		button.addActionListener(this);
+		toolbar.add(button);
 		button = new JButton("Repaint");
 		button.setMnemonic(KeyEvent.VK_R);
 		button.setActionCommand("repaint");
@@ -234,6 +246,11 @@ public class VoxelGUI
 			handleLoadScript();
 		} else if (action == "repaint") {
 			canvas.repaint();
+		} else if (action == "toggle-grid") {
+			canvas.setShowGrid(!canvas.getShowGrid());
+			canvas.repaint();
+		} else if (action == "export") {
+			handleExport();
 		}
 	}
 
@@ -358,6 +375,27 @@ public class VoxelGUI
 			top.setTitle(this.toString());
 		} catch (IOException e) {
 			messages.add("Error saving file. See console.");
+			console.getOutputPane().append(e.getMessage());
+		}
+	}
+	
+	public void handleExport() {
+		filedlg.removeChoosableFileFilter(filterJS);
+		filedlg.removeChoosableFileFilter(filterVXL);
+		filedlg.setSelectedFile(new File("screenshot.png"));
+		final int answer = filedlg.showSaveDialog(top);
+		if (answer != JFileChooser.APPROVE_OPTION)
+			return;
+
+		try {
+			ImageIO.write(
+				canvas.export(),
+				"png",
+				filedlg.getSelectedFile());
+			messages.add("Scene exported to "
+				+ filedlg.getSelectedFile());
+		} catch (IOException e) {
+			messages.add("Error exporting scene. See console.");
 			console.getOutputPane().append(e.getMessage());
 		}
 	}
