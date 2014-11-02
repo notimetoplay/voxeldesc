@@ -401,7 +401,7 @@ public class VoxelGUI
 	}
 	
 	public void keyPressed(KeyEvent e) {
-		if (e.isControlDown())
+		if (e.isAltDown())
 			return;
 		if (e.getKeyCode() == KeyEvent.VK_UP) {
 			if (histPos < history.size()) {
@@ -427,7 +427,7 @@ public class VoxelGUI
 	}
          	
 	public void keyReleased(KeyEvent e) {
-		if (!e.isControlDown())
+		if (!e.isAltDown())
 			return;
 		if (e.getKeyCode() == KeyEvent.VK_UP) {
 			camera.y += 1;
