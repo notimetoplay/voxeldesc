@@ -286,11 +286,13 @@ public class VoxelGUI
 		filedlg.addChoosableFileFilter(filterJS);
 		filedlg.setFileFilter(filterJS);
 		final int answer = filedlg.showOpenDialog(top);
-		if (answer != JFileChooser.APPROVE_OPTION)
-			return;
+		if (answer == JFileChooser.APPROVE_OPTION)
+			loadScript(filedlg.getSelectedFile());
+	}
 
-		final File file = filedlg.getSelectedFile();
+	public void loadScript(final File file) {
 		final FileReader reader;
+
 		try {
 			reader = new FileReader(file);
 		} catch (FileNotFoundException e) {
@@ -322,18 +324,24 @@ public class VoxelGUI
 		filedlg.addChoosableFileFilter(filterVXL);
 		filedlg.setFileFilter(filterVXL);
 		final int answer = filedlg.showOpenDialog(top);
-		if (answer != JFileChooser.APPROVE_OPTION)
-			return;
+		if (answer == JFileChooser.APPROVE_OPTION)
+			open(filedlg.getSelectedFile());
+	}
+	
+	public void open(final String filename) {
+		open(new File(filename));
+	}
 
-		final File file = filedlg.getSelectedFile();
+	public void open(final File file) {
 		final FileReader reader;
+
 		try {
 			reader = new FileReader(file);
 		} catch (FileNotFoundException e) {
 			messages.add("File not found: " + file);
 			return;
 		}
-		
+	
 		scene.getVoxels().clear();
 		try {
 			scene.deserialize(reader);
@@ -384,16 +392,18 @@ public class VoxelGUI
 		filedlg.removeChoosableFileFilter(filterVXL);
 		filedlg.setSelectedFile(new File("screenshot.png"));
 		final int answer = filedlg.showSaveDialog(top);
-		if (answer != JFileChooser.APPROVE_OPTION)
-			return;
+		if (answer == JFileChooser.APPROVE_OPTION)
+			export(filedlg.getSelectedFile());
+	}
+	
+	public void export(final String filename) {
+		export(new File(filename));
+	}
 
+	public void export(final File file) {
 		try {
-			ImageIO.write(
-				canvas.export(),
-				"png",
-				filedlg.getSelectedFile());
-			messages.add("Scene exported to "
-				+ filedlg.getSelectedFile());
+			ImageIO.write(canvas.export(), "png", file);
+			messages.add("Scene exported to " + file);
 		} catch (IOException e) {
 			messages.add("Error exporting scene. See console.");
 			console.getOutputPane().append(e.getMessage());
