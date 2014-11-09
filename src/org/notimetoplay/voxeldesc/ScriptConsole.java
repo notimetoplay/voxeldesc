@@ -28,8 +28,12 @@ public class ScriptConsole implements ActionListener {
 	private ScriptEngine engine;
 	
 	public ScriptConsole() {
+		this("javascript");
+	}
+	
+	public ScriptConsole(String engineName) {
 		final ScriptEngineManager mgr = new ScriptEngineManager();
-		setEngine(mgr.getEngineByName("javascript"));
+		setEngine(mgr.getEngineByName(engineName));
 		makeGUI();
 	}
 	
@@ -139,7 +143,11 @@ public class ScriptConsole implements ActionListener {
 	}
 	
 	public static void main(String[] args) {
-		final ScriptConsole console = new ScriptConsole();
+		final ScriptConsole console;
+		if (args.length > 0)
+			console = new ScriptConsole(args[0]);
+		else
+			console = new ScriptConsole();
 		console.getEngine().put("console", console);
 		final JFrame top = console.getWindow();
 		top.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
