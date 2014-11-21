@@ -7,4 +7,4 @@ Typical voxel editors would have you place every single voxel by clicking with t
 
 As of 2014-10-25, VoxelDesc is starting to look like a complete app. Bugs and limitations undoubtedly remain.
 
-(This repository is a manually updated mirror. Don't expect the commit history to make much sense.)
+(This repository is a manually updated mirror. Don't expect the commit history to make much sense. For details, see [the project homepage](http://claudeb.itch.io/voxeldesc) and the [development blog](http://notimetoplay.org/).)
