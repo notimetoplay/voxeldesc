@@ -16,7 +16,7 @@ Typical voxel editors would have you place every single voxel by clicking with t
 
 =head2 Features and limitations
 
-VoxelDesc is a pure voxel editor. A full description of voxels is outside the scope of this manual. Suffice to say, just as an ordinary picture (say, a GIF) is made of little colored squares arranged in a grid -- called pixels -- a voxel scene is made of little colored <em>cubes</em> which just happen to have a depth as well. That's it. No lighting or other fancy effects. You make voxels stand out from each other by giving them different colors, just like you would in pixel art.
+VoxelDesc is a pure voxel editor. A full description of voxels is outside the scope of this manual. Suffice to say, just as an ordinary picture (say, a GIF) is made of little colored squares arranged in a grid -- called pixels -- a voxel scene is made of little colored I<cubes> which just happen to have a depth as well. That's it. No lighting or other fancy effects. You make voxels stand out from each other by giving them different colors, just like you would in pixel art.
   
 In theory, VoxelDesc supports scenes of up to 16.7 million voxels (256x256x256). In practice, 10K voxels already slow down the app noticeably. Then again, I have an old machine. YMMV.
   
