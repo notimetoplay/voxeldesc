@@ -1,4 +1,4 @@
-=pod
+=encoding utf8
 
 =head1 NAME
 
@@ -86,7 +86,11 @@ You'll notice this list corresponds to the constants in java.awt.Color; it's a s
 
 =head1 AUTHORS
 
-VoxelDesc was designed and coded by Felix Plesoianu L<http://felix.plesoianu.ro/>.
+VoxelDesc was designed and coded by Felix Pleşoianu, L<http://felix.plesoianu.ro/>.
+
+=head1 BUGS
+
+You can signal any problems you have to the project's issue tracker on GitHub: L<https://github.com/felixplesoianu/voxeldesc/issues>.
 
 =head1 SEE ALSO
 
